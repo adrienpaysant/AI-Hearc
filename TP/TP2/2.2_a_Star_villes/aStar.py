@@ -22,7 +22,7 @@ def aStar(dicCity,cityA,cityB,h):
     sumWeight = {cityA: 0}
     steps = 0
 
-    while not frontier.empty():
+    while frontier:
         current = frontier.get()
         steps+=1
         if current==cityB:

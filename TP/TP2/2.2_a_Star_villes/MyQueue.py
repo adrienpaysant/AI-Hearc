@@ -16,9 +16,6 @@ class MyQueue:
     def __contains__(self, element):
         return element in self.queue
 
-    def empty(self):
-        return len(self.queue) == 0
-
     def get(self):
         return heapq.heappop(self.queue)[1]
 
