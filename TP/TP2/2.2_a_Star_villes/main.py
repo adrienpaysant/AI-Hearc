@@ -1,5 +1,4 @@
 import math
-from queue import PriorityQueue
 from CityLink import *
 from aStar import *
 import os

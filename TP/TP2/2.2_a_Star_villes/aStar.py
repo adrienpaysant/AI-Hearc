@@ -1,4 +1,4 @@
-from queue import PriorityQueue
+from MyQueue import *
 from CityLink import *
 import math
 
@@ -17,15 +17,14 @@ def aStar(dicCity,cityA,cityB,h):
     """ A* search between two city
         from dicCity with a definned heuristic
     """
-    frontier = PriorityQueue()
-    frontier.put((0,cityA))
+    frontier = MyQueue()
+    frontier.put(0,cityA)
     sumWeight = {cityA: 0}
     steps = 0
 
     while not frontier.empty():
-        temp = frontier.get()
+        current = frontier.get()
         steps+=1
-        current=temp[1]
         if current==cityB:
             return current, steps
             
@@ -35,6 +34,6 @@ def aStar(dicCity,cityA,cityB,h):
                 sumWeight[coLeaf] = tempWeight
                 coLeaf.parent = current
                 priority = h(coLeaf, cityB) + tempWeight
-                frontier.put((priority,coLeaf))
+                frontier.put(priority,coLeaf)
 
     raise Exception("no solution")

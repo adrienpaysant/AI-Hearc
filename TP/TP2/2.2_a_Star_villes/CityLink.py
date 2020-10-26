@@ -12,6 +12,9 @@ class City :
     def __str__(self):
         return str(self.name)
 
+    def __lt__(self,other):
+        return True
+
     def getcoLeafs(self,dicCity):
         """ return a list of the coLeaf of self"""
         neighbors=[]
