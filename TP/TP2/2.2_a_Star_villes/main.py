@@ -9,8 +9,6 @@ def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 
 
-
-
 if __name__ == '__main__':
     #getting data
     dicCity = readAll()

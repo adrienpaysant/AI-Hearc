@@ -1,5 +1,6 @@
 from queue import PriorityQueue
 from CityLink import *
+import math
 
 #heuristiques 
 def h0(n,B): return 0
