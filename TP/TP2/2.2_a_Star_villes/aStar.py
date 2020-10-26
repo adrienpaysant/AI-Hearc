@@ -4,8 +4,8 @@ import math
 
 #heuristiques 
 def h0(n,B): return 0
-def h1(n,B): return B.X-n.X
-def h2(n,B): return B.Y-n.Y
+def h1(n,B): return abs(B.X-n.X)
+def h2(n,B): return abs(B.Y-n.Y)
 def h3(n,B): return math.sqrt((B.X-n.X)**2+(B.Y+n.Y)**2)
 def h4(n,B): return h1(n,B)+h2(n,B)
 
