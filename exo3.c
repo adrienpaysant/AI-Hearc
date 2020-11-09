@@ -107,14 +107,15 @@ int main(int argc, char *argv[])
 
 	if(argc>1){	
     char* nbDepart=argv[1];
-		int baseDepart=atoi(argv[2]);
+	int baseDepart=atoi(argv[2]);
     int baseArrive=atoi(argv[3]);
-
-    int nbDec=toDeci(nbDepart,baseDepart);
-    char nbArrive[100000];
-    char* output=fromDeci(nbArrive,baseArrive,nbDec);
-    printf("%s en base %i donne %s en base %i",nbDepart,baseDepart,output,baseArrive);
-    printf("\n\n output = %s",output);
+    if(nbDepart[0]!='-' && baseDepart>1 && baseDepart<37 && baseArrive>1 && baseArrive < 37){
+        int nbDec=toDeci(nbDepart,baseDepart);
+        char nbArrive[100000];
+        char* output=fromDeci(nbArrive,baseArrive,nbDec);
+        printf("%s en base %i donne %s en base %i",nbDepart,baseDepart,output,baseArrive);
+        printf("\n\n output = %s",output);
+    }
  }
     return 0;
 }
