@@ -29,7 +29,12 @@ def display_labyrinth(grid, start_cell, end_cell, solution=None):
     else:
         print("No solution has been found")
     plt.matshow(grid, cmap="tab20c")
-    
+
+
+def f
+
+
+
 def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
     """Attempt to solve the labyrinth by returning the best path found
     :param grid np.array: numpy 2d array
@@ -38,5 +43,7 @@ def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
     :max_time_s float: maximum time for running the algorithm
     :return list: list of successive tuple i, j indices who forms the path
     """
-    # TODO Implementation..
-    return None
+    solution=[]
+    
+
+    return solution
