@@ -31,7 +31,11 @@ def display_labyrinth(grid, start_cell, end_cell, solution=None):
     plt.matshow(grid, cmap="tab20c")
 
 
-def f
+def generate_field(M, N, P=.9, start=(0,0), end=None):
+    if end == None: end = (M-1,N-1)
+    field = np.random.choice([0, 1], size=(M,N), p=[P, 1-P])
+    field[start] = field[end] = 0
+    return field
 
 
 
