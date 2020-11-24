@@ -157,7 +157,6 @@ def computeChromosome(individual, grid):
     """ from individual to a valid path in maze """
     currentPos = nextPos = (0,0)
     codes=indivParser(individual)
-    # codes=optimize(individual, codes)
     
     path= list()
     path.append(currentPos)
@@ -225,31 +224,6 @@ def findWinner(population):
             better=ind.fitness.values[0]           
             winner = ind
     return winner
-
-def optimize(individual, codes):
-    """ path optimization """
-    opti = ""
-    var = ""
-    last=codes[0]
-    for currentCodeStr in codes:
-        if (currentCodeStr == MOVE_DOWN and last == MOVE_UP) :
-            var += currentCodeStr
-        elif (currentCodeStr == MOVE_UP and last == MOVE_DOWN) :  
-            var += currentCodeStr
-        elif (currentCodeStr == MOVE_LEFT and last == MOVE_RIGHT) :
-            var += currentCodeStr
-        elif (currentCodeStr == MOVE_RIGHT and last == MOVE_LEFT) :
-            var += currentCodeStr
-        else:
-            opti +=currentCodeStr
-            last = currentCodeStr
-    codes=opti + var
-    for i in range(0, len(individual),1):
-        individual[i] = int(codes[i],10)
-    better=list()
-    for i in range(0, len(codes)-1,2):
-        better.append(codes[i]+codes[i+1])
-    return better
 
 def goFurther(position, grid):
     """ check a pos in grid to avoid mistakes """
