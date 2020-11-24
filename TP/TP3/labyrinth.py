@@ -17,12 +17,12 @@ MOVE_DOWN   = "00"
 
 #general values
 CXPB = 0.7 # crossover probability
-MUTPB = 0.4 # mutation probability (of a chromosome)
+MUTPB = 0.4 # mutation probability 
 TOURNAMENTSIZE = 10
 
 
 def generate_field(M, N, P=.9, start=(0,0), end=None):
-    """ function to generate random maze """
+    """ generate random maze """
     if end == None: end = (M-1,N-1)
     field = np.random.choice([0, 1], size=(M,N), p=[P, 1-P])
     field[start] = field[end] = 0
@@ -67,7 +67,7 @@ def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
     :return list: list of successive tuple i, j indices who forms the path
     """
 
-    #switching few parameters on the grid shape
+    #switching parameters on the grid shape
     if(grid.shape[0] == 10):
         print("Dimension : 10x10")
         CHROMOSOME_LENGTH = 25 * CODE_LENGTH 
@@ -100,7 +100,7 @@ def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
         MAX_TIME = max_time_s
     
     print("Work in progress...please wait")
-    #Tools
+    #DEAP
     creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
     creator.create("Individual", list, fitness=creator.FitnessMin) 
     toolbox = base.Toolbox()
@@ -112,7 +112,7 @@ def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
     toolbox.register("init_individual", tools.initRepeat, creator.Individual, toolbox.init_gene, CHROMOSOME_LENGTH)
     toolbox.register("init_population", tools.initRepeat, list, toolbox.init_individual)
     
-    #create & evalue population
+    #population creation + evaluation
     population = toolbox.init_population(SIZE_POPULATION)
     for ind in population:
         ind.fitness.values = toolbox.fitness(ind, grid)
@@ -133,7 +133,7 @@ def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
         for titan in children:
             if random.random() < MUTPB:
                 toolbox.mutate(titan)
-        #population grading
+        #grading children
         for ind in children:
             ind.fitness.values = toolbox.fitness(ind, grid)
         population = children
@@ -154,7 +154,7 @@ def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
     return path
 
 def computeChromosome(individual, grid): 
-    """ from individual to a valid path in maze """
+    """ from individual (list of bit) to a valid path in maze """
     currentPos = nextPos = (0,0)
     codes=indivParser(individual)
     
@@ -171,7 +171,7 @@ def computeChromosome(individual, grid):
         elif (code == MOVE_RIGHT) :
             nextPos= (currentPos[0] +1, currentPos[1])
       
-        if(goFurther(nextPos, grid)):    
+        if(goFurtherToNextPos(nextPos, grid)):    
             currentPos = (nextPos[0],nextPos[1])
             path.append(currentPos)
             if((nextPos[1] == grid.shape[1] -1) and (nextPos[0] == grid.shape[0] -1)):
@@ -183,53 +183,50 @@ def computeChromosome(individual, grid):
 def fitness(individual, grid):
     """ manhattan distance based fitness function """
     path = computeChromosome(individual, grid)
-    last = path[len(path)-1]
-    return (abs((grid.shape[0]-1) - last[0]) + abs((grid.shape[1]-1) - last[1]),)
+    return (abs((grid.shape[0]-1) - path[len(path)-1][0]) + abs((grid.shape[1]-1) - path[len(path)-1][1]),)
     
 def indivParser(individual):
     """ Parse for chromosomes """
     chrom = "".join([str(genome) for genome in individual])
     codes = [(chrom[i: i + CODE_LENGTH]) for i in range(0,len(chrom), CODE_LENGTH)]
 
+    #computing path
     opti = ""
     var = ""
-    last=codes[0]
     for currentCodeStr in codes:
-        if (currentCodeStr == MOVE_DOWN and last == MOVE_UP) :
+        if (currentCodeStr == MOVE_DOWN and codes[0] == MOVE_UP) :
             var += currentCodeStr
-        elif (currentCodeStr == MOVE_UP and last == MOVE_DOWN) :  
+        elif (currentCodeStr == MOVE_UP and codes[0] == MOVE_DOWN) :  
             var += currentCodeStr
-        elif (currentCodeStr == MOVE_LEFT and last == MOVE_RIGHT) :
+        elif (currentCodeStr == MOVE_LEFT and codes[0] == MOVE_RIGHT) :
             var += currentCodeStr
-        elif (currentCodeStr == MOVE_RIGHT and last == MOVE_LEFT) :
+        elif (currentCodeStr == MOVE_RIGHT and codes[0] == MOVE_LEFT) :
             var += currentCodeStr
         else:
             opti +=currentCodeStr
-            last = currentCodeStr
+            codes[0] = currentCodeStr
+    #sublimed path
     codes=opti + var
-    for i in range(0, len(individual),1):
-        individual[i] = int(codes[i],10)
     better=list()
     for i in range(0, len(codes)-1,2):
         better.append(codes[i]+codes[i+1])
     return better
-    # return codes
 
 def findWinner(population):
     """ Return the best individual of the population """
-    better=sys.maxsize
-    winner=population[0]
-    for ind in population:
-        if ind.fitness.values[0] < better:
-            better=ind.fitness.values[0]           
-            winner = ind
-    return winner
+    comparingBoy=sys.maxsize
+    goldenBoy=population[0]
+    for individual in population:
+        if individual.fitness.values[0] < comparingBoy:
+            comparingBoy=individual.fitness.values[0]           
+            goldenBoy = individual
+    return goldenBoy
 
-def goFurther(position, grid):
+def goFurtherToNextPos(pos, grid):
     """ check a pos in grid to avoid mistakes """
-    if ((position[0] < grid.shape[0]) and (position[0] >= 0)):
-        if((position[1] < grid.shape[1]) and (position[1] >= 0)):
-            if (grid[position[0]][position[1]] == 0):
+    if ((pos[0] < grid.shape[0]) and (pos[0] >= 0)):
+        if((pos[1] < grid.shape[1]) and (pos[1] >= 0)):
+            if (grid[pos[0]][pos[1]] == 0):
                 return True
     return False
 
