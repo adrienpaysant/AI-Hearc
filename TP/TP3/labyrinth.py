@@ -17,7 +17,7 @@ MOVE_DOWN   = "00"
 
 #general values
 CXPB = 0.7 # crossover probability
-MUTPB = 0.4 # mutation probability 
+MUTPB = 0.5 # mutation probability 
 TOURNAMENTSIZE = 10
 
 
@@ -71,17 +71,17 @@ def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
     if(grid.shape[0] == 10):
         print("Dimension : 10x10")
         CHROMOSOME_LENGTH = 25 * CODE_LENGTH 
-        SIZE_POPULATION = 100
+        SIZE_POPULATION = 50
         MAX_TIME = 10
     elif(grid.shape[0] == 15):
         print("Dimension : 15x15")
         CHROMOSOME_LENGTH = 35*CODE_LENGTH
-        SIZE_POPULATION = 200
+        SIZE_POPULATION = 150
         MAX_TIME = 15
     elif(grid.shape[0] == 20):
         print("Dimension : 20x20")
         CHROMOSOME_LENGTH = 60*CODE_LENGTH 
-        SIZE_POPULATION = 300
+        SIZE_POPULATION = 200
         MAX_TIME = 30
     elif(grid.shape[0] == 30):
         print("Dimension : 30x30")
@@ -91,12 +91,12 @@ def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
     elif(grid.shape[0] == 40):
         print("Dimension : 40x40")
         CHROMOSOME_LENGTH = 100*CODE_LENGTH
-        SIZE_POPULATION = 800
+        SIZE_POPULATION = 600
         MAX_TIME  = 90
     else :
         #default case
         CHROMOSOME_LENGTH = int(grid.shape[0]*grid.shape[1] - np.sum(grid))
-        SIZE_POPULATION = 500
+        SIZE_POPULATION = 50
         MAX_TIME = max_time_s
     
     print("Work in progress...please wait")
@@ -149,12 +149,12 @@ def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
             print('the time out he is')
         solution = findWinner(population)
         path = computeChromosome(solution, grid)
-        print("population generation number : {}".format(sumOfGeneration))
+        print("number of generations : {}".format(sumOfGeneration))
         print("time elapsed : {}".format(elapsed))
     return path
 
 def computeChromosome(individual, grid): 
-    """ from individual (list of bit) to a valid path in maze """
+    """ from individual (list of bit) to a path in maze """
     currentPos = nextPos = (0,0)
     codes=indivParser(individual)
     
@@ -183,7 +183,7 @@ def computeChromosome(individual, grid):
 def fitness(individual, grid):
     """ manhattan distance based fitness function """
     path = computeChromosome(individual, grid)
-    return (abs((grid.shape[0]-1) - path[len(path)-1][0]) + abs((grid.shape[1]-1) - path[len(path)-1][1]),)
+    return (abs((grid.shape[0]-1) - path[len(path)-1][0]) + abs((grid.shape[1]-1) - path[len(path)-1][1]),len(path),)
     
 def indivParser(individual):
     """ Parse for chromosomes """
