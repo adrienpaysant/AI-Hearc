@@ -103,8 +103,8 @@ def solve_labyrinth(grid, start_cell, end_cell, max_time_s):
         MAX_TIME  = 90
     else :
         #default case
-        CXPB = 0.6 
-        MUTPB = 0.6 
+        CXPB = 0.4
+        MUTPB = 0.7 
         CHROMOSOME_LENGTH = int(grid.shape[0]*grid.shape[1] - np.sum(grid))
         SIZE_POPULATION = 50
         MAX_TIME = max_time_s
